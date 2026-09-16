@@ -1,0 +1,115 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  CloudRAG - Serverless RAG Q&A over policy documents.
+  Deploys S3 bucket, Lambda functions, API Gateway, and least-privilege IAM.
+  Bedrock Knowledge Base itself is created via the console/CLI first (see
+  infrastructure/README section in the main README) because KB + OpenSearch
+  Serverless collection creation isn't fully idiomatic in SAM yet — the KB ID
+  is then passed in as a parameter here.
+
+Parameters:
+  KnowledgeBaseId:
+    Type: String
+    Description: ID of an existing Bedrock Knowledge Base (created out-of-band)
+  BedrockModelArn:
+    Type: String
+    Default: arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-haiku-20240307-v1:0
+  AllowedOrigin:
+    Type: String
+    Default: "http://localhost:5173"
+    Description: Frontend origin allowed to call this API (set to your deployed frontend URL in prod)
+
+Globals:
+  Function:
+    Runtime: python3.11
+    Timeout: 30
+    MemorySize: 256
+    Environment:
+      Variables:
+        DOCUMENT_BUCKET: !Ref DocumentBucket
+        KNOWLEDGE_BASE_ID: !Ref KnowledgeBaseId
+        BEDROCK_MODEL_ARN: !Ref BedrockModelArn
+        RETRIEVAL_TOP_K: "4"
+        LOG_LEVEL: INFO
+
+Resources:
+
+  DocumentBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "cloudrag-documents-${AWS::AccountId}-${AWS::Region}"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  CloudRagApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Cors:
+        AllowMethods: "'POST,GET'"
+        AllowHeaders: "'Content-Type'"
+        AllowOrigin: !Sub "'${AllowedOrigin}'"
+
+  UploadFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src.lambda_handler.upload_handler
+      CodeUri: ../backend/
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref DocumentBucket
+      Events:
+        UploadApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref CloudRagApi
+            Path: /upload
+            Method: post
+
+  QueryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src.lambda_handler.query_handler
+      CodeUri: ../backend/
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:RetrieveAndGenerate
+                - bedrock:Retrieve
+                - bedrock:InvokeModel
+              Resource: "*"
+              # Scoped further at the KB/model level once ARNs are finalized;
+              # bedrock:InvokeModel currently requires resource "*" for
+              # on-demand foundation models per AWS's own guidance.
+      Events:
+        QueryApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref CloudRagApi
+            Path: /query
+            Method: post
+
+  HealthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src.lambda_handler.health_handler
+      CodeUri: ../backend/
+      Events:
+        HealthApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref CloudRagApi
+            Path: /health
+            Method: get
+
+Outputs:
+  ApiUrl:
+    Description: Invoke URL for the CloudRAG API
+    Value: !Sub "https://${CloudRagApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
+  DocumentBucketName:
+    Value: !Ref DocumentBucket

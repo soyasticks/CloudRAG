@@ -1,0 +1,31 @@
+# Environment
+.env
+.env.local
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Local RAG data (large index files, sample PDFs may be personal)
+local-rag/data/index/
+local-rag/data/sample_policies/*.pdf
+
+# Evaluation results
+evaluation/results/
+
+# AWS SAM
+.aws-sam/
+samconfig.toml
+
+# OS / editor
+.DS_Store
+.vscode/
+*.log

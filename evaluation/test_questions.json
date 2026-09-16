@@ -1,0 +1,124 @@
+[
+  {
+    "id": "q1",
+    "question": "How many annual leave days are employees entitled to?",
+    "expected_answer_contains": ["annual leave", "days"],
+    "expected_source": "Leave Policy.pdf"
+  },
+  {
+    "id": "q2",
+    "question": "Can unused annual leave be carried forward to the next year?",
+    "expected_answer_contains": ["carry", "forward"],
+    "expected_source": "Leave Policy.pdf"
+  },
+  {
+    "id": "q3",
+    "question": "What is the process for requesting sick leave?",
+    "expected_answer_contains": ["sick leave"],
+    "expected_source": "Leave Policy.pdf"
+  },
+  {
+    "id": "q4",
+    "question": "What is the company's policy on remote work?",
+    "expected_answer_contains": ["remote"],
+    "expected_source": "Employee Handbook.pdf"
+  },
+  {
+    "id": "q5",
+    "question": "What is the probation period for new employees?",
+    "expected_answer_contains": ["probation"],
+    "expected_source": "Employee Handbook.pdf"
+  },
+  {
+    "id": "q6",
+    "question": "What is the company's dress code policy?",
+    "expected_answer_contains": ["dress"],
+    "expected_source": "Employee Handbook.pdf"
+  },
+  {
+    "id": "q7",
+    "question": "What password requirements does the IT security policy specify?",
+    "expected_answer_contains": ["password"],
+    "expected_source": "IT Security Policy.pdf"
+  },
+  {
+    "id": "q8",
+    "question": "What should an employee do if they suspect a phishing email?",
+    "expected_answer_contains": ["phishing", "report"],
+    "expected_source": "IT Security Policy.pdf"
+  },
+  {
+    "id": "q9",
+    "question": "Are employees allowed to use personal devices for work (BYOD)?",
+    "expected_answer_contains": ["device"],
+    "expected_source": "IT Security Policy.pdf"
+  },
+  {
+    "id": "q10",
+    "question": "What expenses are eligible for reimbursement under company travel?",
+    "expected_answer_contains": ["reimburse", "travel"],
+    "expected_source": "Reimbursement Policy.pdf"
+  },
+  {
+    "id": "q11",
+    "question": "What is the deadline for submitting a reimbursement claim?",
+    "expected_answer_contains": ["deadline", "days"],
+    "expected_source": "Reimbursement Policy.pdf"
+  },
+  {
+    "id": "q12",
+    "question": "Is alcohol reimbursable as a business expense?",
+    "expected_answer_contains": ["alcohol"],
+    "expected_source": "Reimbursement Policy.pdf"
+  },
+  {
+    "id": "q13",
+    "question": "What is the notice period for resignation?",
+    "expected_answer_contains": ["notice period"],
+    "expected_source": "Employee Handbook.pdf"
+  },
+  {
+    "id": "q14",
+    "question": "How does an employee report harassment in the workplace?",
+    "expected_answer_contains": ["harassment", "report"],
+    "expected_source": "Employee Handbook.pdf"
+  },
+  {
+    "id": "q15",
+    "question": "What is the company's policy on parental leave?",
+    "expected_answer_contains": ["parental leave"],
+    "expected_source": "Leave Policy.pdf"
+  },
+  {
+    "id": "q16",
+    "question": "Who approves leave requests?",
+    "expected_answer_contains": ["approve", "manager"],
+    "expected_source": "Leave Policy.pdf"
+  },
+  {
+    "id": "q17",
+    "question": "What encryption standards are required for company laptops?",
+    "expected_answer_contains": ["encryption"],
+    "expected_source": "IT Security Policy.pdf"
+  },
+  {
+    "id": "q18",
+    "question": "Can an employee expense a client dinner, and is there a per-person limit?",
+    "expected_answer_contains": ["client", "limit"],
+    "expected_source": "Reimbursement Policy.pdf"
+  },
+  {
+    "id": "q19",
+    "question": "What is the company's policy on flying first class for business trips?",
+    "expected_answer_contains": ["I could not find", "insufficient"],
+    "expected_source": null,
+    "note": "Deliberately unanswerable from the sample docs — tests unsupported-question handling. Do not add this content to the sample PDFs."
+  },
+  {
+    "id": "q20",
+    "question": "What is the CEO's personal phone number?",
+    "expected_answer_contains": ["I could not find", "insufficient"],
+    "expected_source": null,
+    "note": "Deliberately out-of-scope/irrelevant question — should trigger a graceful 'not found' response, not a hallucinated answer."
+  }
+]
