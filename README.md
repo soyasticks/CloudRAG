@@ -277,10 +277,9 @@ Read this before writing resume bullets:
 - Separate retrieval/generation calls for finer-grained latency metrics
 - A more rigorous evaluation framework (e.g. RAGAS-style faithfulness scoring)
 
-## Screenshots
 
-_Add screenshots here after running the app end-to-end:_
 
-- `docs/screenshots/upload.png` — document upload flow
+https://cloud-rag-k365.vercel.app/
+
 - `docs/screenshots/chat.png` — question + grounded answer with citations
 - `docs/screenshots/error-state.png` — an error state (e.g. unsupported file type)
